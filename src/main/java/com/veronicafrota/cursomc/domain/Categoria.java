@@ -2,13 +2,22 @@ package com.veronicafrota.cursomc.domain;
 
 import java.io.Serializable;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+
+@Entity			// Indicates that classes will be converted to table because of JPA.
 public class Categoria implements Serializable {
 
 	// Implement the Serializable interface, which says that its objects can be converted to a sequence of bits
 	private static final long serialVersionUID = 1L;
 
-	// Parameters
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)			// Defines the automatic ID generation, for generate primary key
 	private Integer id;
+
 	private String nome;
 
 	// Empty constructor
