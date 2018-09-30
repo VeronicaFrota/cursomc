@@ -8,35 +8,46 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
-@Entity			// Indicates that classes will be converted to table because of JPA.
-public class Categoria implements Serializable {
+import org.hibernate.annotations.ManyToAny;
 
-	// Implement the Serializable interface, which says that its objects can be converted to a sequence of bits.
+@Entity
+public class Produto implements Serializable{
+
+	// Implement the Serializable interface, which says that its objects can be converted to a sequence of bits
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)		// Defines the automatic ID generation, for generate primary key.
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 
 	private String nome;
 
-	@ManyToMany(mappedBy = "categorias")					// Realizing the existing association between products and categories (relationship already made in products).
-	private List<Produto> produtos = new ArrayList<>();		// association between product and category (diagram).
+	private Double preco;
+	
+	@ManyToMany
+	@JoinTable(name = "PRODUTO_CATEGORIA",								 // Name of column
+			   joinColumns = @JoinColumn(name = "produto_id"),			 // Name of foreign key
+			   inverseJoinColumns = @JoinColumn(name = "categoria_id")	 // Name of foreign key
+    )
+	private List<Categoria> categorias = new ArrayList<>();			// association between product and category (diagram)
 
 	// Empty constructor
-	public Categoria() {
-
+	public Produto() {
+		
 	}
 
-	// Constructor with data
-	public Categoria(Integer id, String nome) {
+	// Constructor with data. 
+	public Produto(Integer id, String nome, Double preco) {
 		super();
 		this.id = id;
 		this.nome = nome;
+		this.preco = preco;
 	}
-	
+
 	// HashCode Equals = To compare objects by value
 	// HashCode = generates a numerical code for each object
 	@Override
@@ -46,7 +57,7 @@ public class Categoria implements Serializable {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
-	
+
 	// Equals = method that compares two objects
 	@Override
 	public boolean equals(Object obj) {
@@ -56,7 +67,7 @@ public class Categoria implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Categoria other = (Categoria) obj;
+		Produto other = (Produto) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -65,7 +76,6 @@ public class Categoria implements Serializable {
 		return true;
 	}
 
-	
 	// Getters and Setters
 	public Integer getId() {
 		return id;
@@ -74,21 +84,25 @@ public class Categoria implements Serializable {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	
 	public String getNome() {
 		return nome;
 	}
-	
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
-	public List<Produto> getProdutos() {
-		return produtos;
+	public Double getPreco() {
+		return preco;
+	}
+	public void setPreco(Double preco) {
+		this.preco = preco;
 	}
 
-	public void setProdutos(List<Produto> produtos) {
-		this.produtos = produtos;
+	public List<Categoria> getCategorias() {
+		return categorias;
 	}
-	
+
+	public void setCategorias(List<Categoria> categorias) {
+		this.categorias = categorias;
+	}
+
 }
