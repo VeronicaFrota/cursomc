@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.veronicafrota.cursomc.domain.Categoria;
 import com.veronicafrota.cursomc.repositories.CategoriaRepository;
+import com.veronicafrota.cursomc.services.exceptions.ObjectNotFoundException;
 
 // For service access and get the information from the repository
 
@@ -19,6 +20,12 @@ public class CategoriaService {
 	public Categoria buscar(Integer id) {
 		
 		Categoria obj = repo.findOne(id);
+
+		// Message to handle error of objects not found.
+		if(obj == null) {
+			throw new ObjectNotFoundException("Objeto não encontrado! Id: " + id
+					+ ", tipo: " + Categoria.class.getName());
+		}
 		return obj;
 	}
 

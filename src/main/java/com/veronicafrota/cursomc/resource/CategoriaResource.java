@@ -28,7 +28,6 @@ public class CategoriaResource {
 		
 		Categoria obj = service.buscar(id);
 		return ResponseEntity.ok().body(obj);			// Informs if the answer is ok
-
 	}
 	
 }
