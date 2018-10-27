@@ -21,7 +21,6 @@ public class Categoria implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)		// Defines the automatic ID generation, for generate primary key.
 	private Integer id;
-
 	private String nome;
 
 	@JsonManagedReference									// Message to handle error of objects not found.
