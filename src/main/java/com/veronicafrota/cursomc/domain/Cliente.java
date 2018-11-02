@@ -15,6 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.veronicafrota.cursomc.domain.enums.TipoCliente;
 
 @Entity
@@ -31,8 +33,9 @@ public class Cliente implements Serializable{
 	private String cpfOuCnpj;
 	private Integer tipo;
 	
-	// The client has an address list
-	@OneToMany(mappedBy = "cliente")
+	
+	@JsonManagedReference							// For cyclic Json serialization, to use @JsonBackReference in the address class so that it can not serialize the client class
+	@OneToMany(mappedBy = "cliente")				// The client has an address list
 	private List<Endereco> enderecos = new ArrayList<>();
 	
 	// Collection of strings associated with the client, phone being represented by a set of strings
