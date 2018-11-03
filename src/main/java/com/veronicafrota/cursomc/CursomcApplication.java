@@ -7,6 +7,7 @@ import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.veronicafrota.cursomc.domain.Categoria;
@@ -14,6 +15,7 @@ import com.veronicafrota.cursomc.domain.Cidade;
 import com.veronicafrota.cursomc.domain.Cliente;
 import com.veronicafrota.cursomc.domain.Endereco;
 import com.veronicafrota.cursomc.domain.Estado;
+import com.veronicafrota.cursomc.domain.ItemPedido;
 import com.veronicafrota.cursomc.domain.Pagamento;
 import com.veronicafrota.cursomc.domain.PagamentoComBoleto;
 import com.veronicafrota.cursomc.domain.PagamentoComCartao;
@@ -26,6 +28,7 @@ import com.veronicafrota.cursomc.repositories.CidadeRepository;
 import com.veronicafrota.cursomc.repositories.ClienteRepository;
 import com.veronicafrota.cursomc.repositories.EnderecoRepository;
 import com.veronicafrota.cursomc.repositories.EstadoRepository;
+import com.veronicafrota.cursomc.repositories.ItemPedidoRepository;
 import com.veronicafrota.cursomc.repositories.PagamentoRepository;
 import com.veronicafrota.cursomc.repositories.PedidoRepository;
 import com.veronicafrota.cursomc.repositories.ProdutoRepository;
@@ -58,6 +61,9 @@ public class CursomcApplication implements CommandLineRunner{
 
 	@Autowired
 	private PedidoRepository pedidoReppository;				// To access the repository, by entering the data
+
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;		// To access the repository, by entering the data
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -88,7 +94,11 @@ public class CursomcApplication implements CommandLineRunner{
 		
 		categoriaRepository.save(Arrays.asList(cat1, cat2));	// Saves the object in the database with repository.
 		produtoRepository.save(Arrays.asList(p1, p2, p3));		// Saves the object in the database with repository.
-		
+
+
+		// ------------------------------------------------------------------------------------------------------------------------- //
+
+
 		// State Instance.
 		Estado est1 = new Estado(null, "Minas Gerais");
 		Estado est2 = new Estado(null, "São Paulo");
@@ -105,7 +115,11 @@ public class CursomcApplication implements CommandLineRunner{
 
 		estadoRepository.save(Arrays.asList(est1, est2));	// Saves the object in the database with repository.
 		cidadeRepository.save(Arrays.asList(c1, c2, c3));	// Saves the object in the database with repository.
-		
+
+
+		// ------------------------------------------------------------------------------------------------------------------------- //
+
+
 		// Client Instance.
 		Cliente cli1 = new Cliente(null, "Maria Silva", "maria@gmail.com", "12345678919", TipoCliente.PESSOAFISICA);
 		cli1.getTelefones().addAll(Arrays.asList("32324898", "767556789"));
@@ -119,7 +133,10 @@ public class CursomcApplication implements CommandLineRunner{
 		
 		clienteRepository.save(Arrays.asList(cli1));		// Saves the object in the database with repository.
 		enderecoRepository.save(Arrays.asList(e1, e2));		// Saves the object in the database with repository.
-		
+
+
+		// ------------------------------------------------------------------------------------------------------------------------- //
+
 
 		// Pedido Instance.
 		// Mask formatting to instantiate the date
@@ -140,6 +157,31 @@ public class CursomcApplication implements CommandLineRunner{
 		
 		pedidoReppository.save(Arrays.asList(ped1, ped2));
 		pagamentoRepository.save(Arrays.asList(pgto1, pgto2));
+
+
+		// ------------------------------------------------------------------------------------------------------------------------- //
+
+
+		// ItemPedido Instance.
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 80.00);
 		
+		// Association between the Pedido and the ItemPedido, informing which ItemPedido belongs to which Pedido.
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+		
+		// Association between the Produto and the ItemPedido, informing which ItemPedido belongs to which Produto.
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+		
+		itemPedidoRepository.save(Arrays.asList(ip1, ip2, ip3)); 		// Saves the object in the database with repository.
+
+
+		// ------------------------------------------------------------------------------------------------------------------------- //
+
+
+
 	}
 }
