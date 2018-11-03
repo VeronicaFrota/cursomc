@@ -32,7 +32,9 @@ public class Cliente implements Serializable{
 	private String email;
 	private String cpfOuCnpj;
 	private Integer tipo;
-	
+
+	@OneToMany(mappedBy = "cliente")				// To refer to who was mapped, in this case, pedido
+	private List<Pedido> pedidos = new ArrayList<>();
 	
 	@JsonManagedReference							// For cyclic Json serialization, to use @JsonBackReference in the address class so that it can not serialize the client class
 	@OneToMany(mappedBy = "cliente")				// The client has an address list
@@ -142,6 +144,14 @@ public class Cliente implements Serializable{
 
 	public void setTelefones(Set<String> telefones) {
 		this.telefones = telefones;
+	}
+
+	public List<Pedido> getPedidos() {
+		return pedidos;
+	}
+
+	public void setPedidos(List<Pedido> pedidos) {
+		this.pedidos = pedidos;
 	}
 
 	

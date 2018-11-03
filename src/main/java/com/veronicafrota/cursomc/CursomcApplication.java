@@ -1,5 +1,7 @@
 package com.veronicafrota.cursomc;
 
+import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +14,20 @@ import com.veronicafrota.cursomc.domain.Cidade;
 import com.veronicafrota.cursomc.domain.Cliente;
 import com.veronicafrota.cursomc.domain.Endereco;
 import com.veronicafrota.cursomc.domain.Estado;
+import com.veronicafrota.cursomc.domain.Pagamento;
+import com.veronicafrota.cursomc.domain.PagamentoComBoleto;
+import com.veronicafrota.cursomc.domain.PagamentoComCartao;
+import com.veronicafrota.cursomc.domain.Pedido;
 import com.veronicafrota.cursomc.domain.Produto;
+import com.veronicafrota.cursomc.domain.enums.EstadoPagamento;
 import com.veronicafrota.cursomc.domain.enums.TipoCliente;
 import com.veronicafrota.cursomc.repositories.CategoriaRepository;
 import com.veronicafrota.cursomc.repositories.CidadeRepository;
 import com.veronicafrota.cursomc.repositories.ClienteRepository;
 import com.veronicafrota.cursomc.repositories.EnderecoRepository;
 import com.veronicafrota.cursomc.repositories.EstadoRepository;
+import com.veronicafrota.cursomc.repositories.PagamentoRepository;
+import com.veronicafrota.cursomc.repositories.PedidoRepository;
 import com.veronicafrota.cursomc.repositories.ProdutoRepository;
 
 // CommandLineRunner: method that allows you to perform an action when the application starts.
@@ -43,6 +52,12 @@ public class CursomcApplication implements CommandLineRunner{
 
 	@Autowired
 	private EnderecoRepository enderecoRepository;			// To access the repository, by entering the data
+
+	@Autowired
+	private PagamentoRepository pagamentoRepository;		// To access the repository, by entering the data
+
+	@Autowired
+	private PedidoRepository pedidoReppository;				// To access the repository, by entering the data
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -104,5 +119,27 @@ public class CursomcApplication implements CommandLineRunner{
 		
 		clienteRepository.save(Arrays.asList(cli1));		// Saves the object in the database with repository.
 		enderecoRepository.save(Arrays.asList(e1, e2));		// Saves the object in the database with repository.
+		
+
+		// Pedido Instance.
+		// Mask formatting to instantiate the date
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+		Pedido ped1 = new Pedido(null, sdf.parse("30/09/2017 10:32"), cli1, e1);
+		Pedido ped2 = new Pedido(null, sdf.parse("10/10/2017 19:35"), cli1, e2);
+		
+		// Pagamento Instance.
+		Pagamento pgto1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
+		ped1.setPagamento(pgto1);			// payment of pagamento1
+
+		Pagamento pgto2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2, sdf.parse("20/10/2017 00:00"), null);
+		ped2.setPagamento(pgto2); 			// payment of pagamento2
+		
+		// Associating customers with orders
+		cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
+		
+		pedidoReppository.save(Arrays.asList(ped1, ped2));
+		pagamentoRepository.save(Arrays.asList(pgto1, pgto2));
+		
 	}
 }
