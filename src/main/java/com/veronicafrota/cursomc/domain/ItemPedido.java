@@ -5,12 +5,15 @@ import java.io.Serializable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class ItemPedido implements Serializable {
 
 	// Implement the Serializable interface, which says that its objects can be converted to a sequence of bits
 	private static final long serialVersionUID = 1L;
 
+	@JsonIgnore										// Not to be serialized, not serializing Pedido and Produto 
 	@EmbeddedId										// It was added @Embeddable to say that the class is a sub type, because it is called as a type in ItemPedido
 	private ItemPedidoPK id = new ItemPedidoPK();	// The ID is of the ItemPedidPK type, since it contains the reference between the two classes, Order and Product
 
@@ -63,6 +66,7 @@ public class ItemPedido implements Serializable {
 	}
 
 	// Getters and setters
+	@JsonIgnore						// Not to be serialized, not serializing Pedido and Produto
 	public Pedido getPedido() {
 		return id.getPedido();
 	}

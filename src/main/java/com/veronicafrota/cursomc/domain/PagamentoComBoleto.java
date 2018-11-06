@@ -4,7 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 
-
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.veronicafrota.cursomc.domain.enums.EstadoPagamento;
 
 @Entity
@@ -13,7 +13,10 @@ public class PagamentoComBoleto extends Pagamento {
 	// Implement the Serializable interface, which says that its objects can be converted to a sequence of bits
 	private static final long serialVersionUID = 1L;
 
+	@JsonFormat(pattern = "dd/MM/yyyy")				// Date Format Mask
 	private Date dataVencimento;
+
+	@JsonFormat(pattern = "dd/MM/yyyy")				// Date Format Mask
 	private Date dataPagamento;
 	
 	// Empty constructor
