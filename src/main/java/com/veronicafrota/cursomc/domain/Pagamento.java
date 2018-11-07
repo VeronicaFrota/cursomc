@@ -10,7 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.veronicafrota.cursomc.domain.enums.EstadoPagamento;
 
 @Entity
@@ -24,7 +24,7 @@ public abstract class Pagamento implements Serializable{
 	private Integer id;
 	private Integer estado;
 	
-	@JsonBackReference							// Allows it to be serialized, For cyclic Json serialization, to use @JsonBackReference in the address class so that it can not serialize the client class
+	@JsonIgnore							// Allows it to be serialized, For cyclic Json serialization, to use @JsonBackReference in the address class so that it can not serialize the client class
 	@OneToOne
 	@JoinColumn(name = "pedido_id")				// So that the pagamento ID is the same as the pedido
 	@MapsId										// So that the pagamento ID is the same as the pedido

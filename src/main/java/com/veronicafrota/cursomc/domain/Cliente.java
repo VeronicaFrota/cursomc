@@ -12,11 +12,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.veronicafrota.cursomc.domain.enums.TipoCliente;
 
 @Entity
@@ -33,11 +31,10 @@ public class Cliente implements Serializable{
 	private String cpfOuCnpj;
 	private Integer tipo;
 
-	@JsonBackReference								// // For cyclic Json serialization, to use @JsonBackReference in the address class so that it can not serialize the client class
+	@JsonIgnore										// For cyclic Json serialization, to use @JsonBackReference in the address class so that it can not serialize the client class
 	@OneToMany(mappedBy = "cliente")				// To refer to who was mapped, in this case, pedido
 	private List<Pedido> pedidos = new ArrayList<>();
-	
-	@JsonManagedReference							// For cyclic Json serialization, to use @JsonBackReference in the address class so that it can not serialize the client class
+
 	@OneToMany(mappedBy = "cliente")				// The client has an address list
 	private List<Endereco> enderecos = new ArrayList<>();
 	

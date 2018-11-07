@@ -10,8 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 @Entity			// Indicates that classes will be converted to table because of JPA.
 public class Categoria implements Serializable {
 
@@ -23,7 +21,6 @@ public class Categoria implements Serializable {
 	private Integer id;
 	private String nome;
 
-	@JsonManagedReference									// Message to handle error of objects not found.
 	@ManyToMany(mappedBy = "categorias")					// Realizing the existing association between products and categories (relationship already made in products).
 	private List<Produto> produtos = new ArrayList<>();		// association between product and category (diagram).
 
