@@ -15,18 +15,24 @@ public class CategoriaService {
 	@Autowired							// Declares dependency on an object of type CategoryRepository
 	private CategoriaRepository repo; 
 
-	// Operation able to search category by code.
-	// To perform category search using id.
+	// Operation able to search category by code, To perform category search using id.
 	public Categoria buscar(Integer id) {
 		
 		Categoria obj = repo.findOne(id);
 
-		// Message to handle error of objects not found.
 		if(obj == null) {
-			throw new ObjectNotFoundException("Objeto não encontrado! Id: " + id
+			throw new ObjectNotFoundException("Objeto não encontrado! Id: " + id	// Message to handle error of objects not found.
 					+ ", tipo: " + Categoria.class.getName());
 		}
 		return obj;
+	}
+
+	// Insert new category
+	public Categoria insert(Categoria obj) {
+		
+		obj.setId(null);		// To confirm that it is a new object and is not an existing one
+		
+		return repo.save(obj);
 	}
 
 }
