@@ -17,7 +17,7 @@ public class PedidoService {
 
 	// Operation able to search category by code.
 	// To perform category search using id.
-	public Pedido buscar(Integer id) {
+	public Pedido find(Integer id) {
 		
 		Pedido obj = repo.findOne(id);
 

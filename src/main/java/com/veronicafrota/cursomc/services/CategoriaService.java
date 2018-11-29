@@ -16,7 +16,7 @@ public class CategoriaService {
 	private CategoriaRepository repo; 
 
 	// Operation able to search category by code, To perform category search using id.
-	public Categoria buscar(Integer id) {
+	public Categoria find(Integer id) {
 		
 		Categoria obj = repo.findOne(id);
 
@@ -32,6 +32,13 @@ public class CategoriaService {
 		
 		obj.setId(null);		// To confirm that it is a new object and is not an existing one
 		
+		return repo.save(obj);
+	}
+	
+	// Update the Category
+	// When null ID, inserts, When ID is not null it updates
+	public Categoria update(Categoria obj) {
+		find(obj.getId());			// Checks if ID exists
 		return repo.save(obj);
 	}
 

@@ -17,7 +17,7 @@ public class ClienteService {
 
 	// Operation able to search category by code.
 	// To perform category search using id.
-	public Cliente buscar(Integer id) {
+	public Cliente find(Integer id) {
 
 		Cliente obj = repo.findOne(id);
 

@@ -24,9 +24,9 @@ public class ClienteResource {
 	// * ResponseEntity<?>: special type of spring that already stores (encapsulation) various information from an HTTP response to a REST service, <?> is equivalent to any type
 	// * @PathVariable: For the spring know that the URL ID will be the variable ID
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	public ResponseEntity<?>find(@PathVariable Integer id) {
+	public ResponseEntity<Cliente>find(@PathVariable Integer id) {
 		
-		Cliente obj = service.buscar(id);
+		Cliente obj = service.find(id);
 		return ResponseEntity.ok().body(obj);			// Informs if the answer is ok
 	}
 	

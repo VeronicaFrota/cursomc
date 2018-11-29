@@ -4,6 +4,7 @@ import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,9 +30,9 @@ public class CategoriaResource {
 	 * @PathVariable: For the spring know that the URL ID will be the variable ID
 	 */
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	public ResponseEntity<?>find(@PathVariable Integer id) {
+	public ResponseEntity<Categoria>find(@PathVariable Integer id) {
 
-		Categoria obj = service.buscar(id);
+		Categoria obj = service.find(id);
 		return ResponseEntity.ok().body(obj);			// Informs if the answer is ok
 	}
 	
@@ -48,5 +49,46 @@ public class CategoriaResource {
 		return ResponseEntity.created(uri).build();		// Creates the URI
 		
 	}
+
+	// Method responsible for changing the data from the url
+	@RequestMapping(value="/{id}", method=RequestMethod.PUT)		// To get the URL ID and update with PUT
+	// @RequestBody Categoria obj = Receives the object and parameters
+	// @PathVariable Integer id   =  Receive URL parameters
+	public ResponseEntity<Void> update(@RequestBody Categoria obj, @PathVariable Integer id) {
+		obj.setId(id); 												// To ensure that it is really the Category
+		obj = service.update(obj);
+		
+		return ResponseEntity.noContent().build();
+	}
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
