@@ -1,4 +1,4 @@
-package com.veronicafrota.cursomc.resource;
+package com.veronicafrota.cursomc.resource.exceptions;
 
 import java.io.Serializable;
 
