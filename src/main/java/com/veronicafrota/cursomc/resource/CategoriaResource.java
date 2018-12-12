@@ -60,7 +60,7 @@ public class CategoriaResource {
 		return ResponseEntity.noContent().build();
 	}
 
-	// Method responsible for deleting the data
+	// Method responsible for deleting the data.
 	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)		// To get the URL ID and update with PUT
 	public ResponseEntity<Void> delete(@PathVariable Integer id){
 		service.delete(id);
