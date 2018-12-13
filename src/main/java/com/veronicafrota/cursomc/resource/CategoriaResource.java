@@ -1,6 +1,9 @@
 package com.veronicafrota.cursomc.resource;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.veronicafrota.cursomc.domain.Categoria;
+import com.veronicafrota.cursomc.dto.CategoriaDTO;
 import com.veronicafrota.cursomc.services.CategoriaService;
 
 // REST controller accesses the Service layer (Ex: private CategoriaService service;)
@@ -31,7 +35,6 @@ public class CategoriaResource {
 	 */
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
 	public ResponseEntity<Categoria> find(@PathVariable Integer id) {
-
 		Categoria obj = service.find(id);
 		return ResponseEntity.ok().body(obj);			// Informs if the answer is ok
 	}
@@ -56,7 +59,6 @@ public class CategoriaResource {
 	public ResponseEntity<Void> update(@RequestBody Categoria obj, @PathVariable Integer id) {
 		obj.setId(id); 												// To ensure that it is really the Category
 		obj = service.update(obj);
-		
 		return ResponseEntity.noContent().build();
 	}
 
@@ -64,10 +66,17 @@ public class CategoriaResource {
 	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)		// To get the URL ID and update with PUT
 	public ResponseEntity<Void> delete(@PathVariable Integer id){
 		service.delete(id);
-		
 		return ResponseEntity.noContent().build();  
 	}
-	
+
+	// Method responsible to list of category
+	// Search the list of bank categories and convert them to DTO
+	@RequestMapping(method=RequestMethod.GET)						// Without the ID why you want to return all categories
+	public ResponseEntity<List<CategoriaDTO>> findAll() {				
+		List<Categoria> list = service.findAll();					// Return all categories
+		List<CategoriaDTO> listDto = list.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList()); // Converts the list to a DTO list;
+		return ResponseEntity.ok().body(listDto);						// Informs if the answer is ok
+	}
 }
 
 
