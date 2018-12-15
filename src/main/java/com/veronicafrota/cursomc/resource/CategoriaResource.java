@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -41,8 +43,9 @@ public class CategoriaResource {
 	
 	// Method that receives a category in Json format and inserts into the database
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> insert(@RequestBody Categoria obj){		//@RequestBody = Converts Json to java object automatically, Answer Http that has no body
-		obj = service.insert(obj);										// Calls the service that inserts the new category into the database
+	public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO objDto){	//@RequestBody = Converts Json to java object automatically, Answer Http that has no body
+		Categoria obj = service.fromDTO(objDto);							// Convert objDto to an object
+		obj = service.insert(obj);											// Calls the service that inserts the new category into the database
 		
 		// To provide the ID for the URI
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
