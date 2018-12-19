@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import com.veronicafrota.cursomc.domain.Cliente;
 
+// Serializable -> To facilitate file saving and network traffic
 public class ClienteDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;

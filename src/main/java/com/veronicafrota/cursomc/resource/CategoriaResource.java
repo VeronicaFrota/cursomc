@@ -40,7 +40,9 @@ public class CategoriaResource {
 		Categoria obj = service.find(id);
 		return ResponseEntity.ok().body(obj);			// Informs if the answer is ok
 	}
-	
+
+
+
 	// Method that receives a category in Json format and inserts into the database
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO objDto){	//@RequestBody = Converts Json to java object automatically, Answer Http that has no body
@@ -52,8 +54,9 @@ public class CategoriaResource {
 				.path("/{id}").buildAndExpand(obj.getId()).toUri();
 		
 		return ResponseEntity.created(uri).build();		// Creates the URI
-		
 	}
+
+
 
 	// Method responsible for changing the data from the url
 	@RequestMapping(value="/{id}", method=RequestMethod.PUT)		// To get the URL ID and update with PUT
@@ -65,12 +68,16 @@ public class CategoriaResource {
 		return ResponseEntity.noContent().build();
 	}
 
+
+
 	// Method responsible for deleting the data.
 	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)		// To get the URL ID and update with PUT
 	public ResponseEntity<Void> delete(@PathVariable Integer id){
 		service.delete(id);
 		return ResponseEntity.noContent().build();  
 	}
+
+
 
 	// Method responsible to list of category
 	// Search the list of bank categories and convert them to DTO
@@ -80,6 +87,7 @@ public class CategoriaResource {
 		List<CategoriaDTO> listDto = list.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList()); // Converts the list to a DTO list;
 		return ResponseEntity.ok().body(listDto);					// Informs if the answer is ok
 	}
+
 
 
 	// Listing method per page

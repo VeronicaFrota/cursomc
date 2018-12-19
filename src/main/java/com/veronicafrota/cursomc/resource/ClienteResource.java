@@ -18,9 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.veronicafrota.cursomc.domain.Cliente;
-import com.veronicafrota.cursomc.domain.Cliente;
 import com.veronicafrota.cursomc.dto.ClienteDTO;
-import com.veronicafrota.cursomc.dto.ClienteDTO;
+import com.veronicafrota.cursomc.dto.ClienteNewDTO;
 import com.veronicafrota.cursomc.services.ClienteService;
 
 // REST controller accesses the Service layer (Ex: private ClienteService service;)
@@ -42,21 +41,24 @@ public class ClienteResource {
 		Cliente obj = service.find(id);
 		return ResponseEntity.ok().body(obj);			// Informs if the answer is ok
 	}
-	
+
+
+
 	// Method that receives a client in Json format and inserts into the database
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteDTO objDto){	//@RequestBody = Converts Json to java object automatically, Answer Http that has no body
-		Cliente obj = service.fromDTO(objDto);							// Convert objDto to an object
-		obj = service.insert(obj);											// Calls the service that inserts the new cliente into the database
+	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO objDto){	//@RequestBody = Converts Json to java object automatically, Answer Http that has no body
+		Cliente obj = service.fromDTO(objDto);									// Convert objDto to an object
+		obj = service.insert(obj);												// Calls the service that inserts the new cliente into the database
 		
 		// To provide the ID for the URI
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
 				.path("/{id}").buildAndExpand(obj.getId()).toUri();
 		
-		return ResponseEntity.created(uri).build();		// Creates the URI
-		
+		return ResponseEntity.created(uri).build();		// Creates the URI		
 	}
-	
+
+
+
 	// Method responsible for changing the data from the url
 	@RequestMapping(value="/{id}", method=RequestMethod.PUT)		// To get the URL ID and update with PUT
 	// @RequestBody Cliente obj = Receives the object and parameters
@@ -67,12 +69,16 @@ public class ClienteResource {
 		return ResponseEntity.noContent().build();
 	}
 
+
+
 	// Method responsible for deleting the data.
 	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)		// To get the URL ID and update with PUT
 	public ResponseEntity<Void> delete(@PathVariable Integer id){
 		service.delete(id);
 		return ResponseEntity.noContent().build();  
 	}
+
+
 
 	// Method responsible to list of cliente
 	// Search the list of bank categories and convert them to DTO
@@ -82,6 +88,7 @@ public class ClienteResource {
 		List<ClienteDTO> listDto = list.stream().map(obj -> new ClienteDTO(obj)).collect(Collectors.toList()); // Converts the list to a DTO list;
 		return ResponseEntity.ok().body(listDto);					// Informs if the answer is ok
 	}
+
 
 
 	// Listing method per page

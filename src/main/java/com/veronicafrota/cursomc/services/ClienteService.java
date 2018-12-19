@@ -9,9 +9,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.veronicafrota.cursomc.domain.Cidade;
 import com.veronicafrota.cursomc.domain.Cliente;
+import com.veronicafrota.cursomc.domain.Endereco;
+import com.veronicafrota.cursomc.domain.enums.TipoCliente;
 import com.veronicafrota.cursomc.dto.ClienteDTO;
+import com.veronicafrota.cursomc.dto.ClienteNewDTO;
+import com.veronicafrota.cursomc.repositories.CidadeRepository;
 import com.veronicafrota.cursomc.repositories.ClienteRepository;
+import com.veronicafrota.cursomc.repositories.EnderecoRepository;
 import com.veronicafrota.cursomc.services.exceptions.DataIntegrityException;
 import com.veronicafrota.cursomc.services.exceptions.ObjectNotFoundException;
 
@@ -20,8 +26,15 @@ import com.veronicafrota.cursomc.services.exceptions.ObjectNotFoundException;
 @Service
 public class ClienteService {
 
-	@Autowired // Declares dependency on an object of type CategoryRepository
+	// Declares dependency on an object of type CategoryRepository
+	@Autowired
 	private ClienteRepository repo;
+
+	@Autowired
+	private CidadeRepository cidadeRepository;
+	
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 
 	// Operation able to search client by code.
 	// To perform client search using id.
@@ -41,7 +54,9 @@ public class ClienteService {
 	// Insert new client
 	public Cliente insert(Cliente obj) {
 		obj.setId(null);		// To confirm that it is a new object and is not an existing one
-		return repo.save(obj);
+		obj = repo.save(obj);
+		enderecoRepository.save(obj.getEnderecos());		// To save the address
+		return obj;
 	}
 
 
@@ -98,6 +113,30 @@ public class ClienteService {
 	public Cliente fromDTO(ClienteDTO objDto) {
 		return new Cliente(objDto.getId(), objDto.getNome(), objDto.getEmail(), null, null);
 	}
+
+
+
+	// Convert objDto to an object to DTO
+	public Cliente fromDTO(ClienteNewDTO objDto) {
+		Cliente cli = new Cliente(null, objDto.getNome(), objDto.getEmail(), objDto.getCpfOuCnpj(), TipoCliente.toEnum(objDto.getTipo()));
+		Cidade cid = cidadeRepository.findOne(objDto.getCidadeId());
+		Endereco end = new Endereco(null, objDto.getLogradouro(), objDto.getNumero(), objDto.getComplemento(), objDto.getBairro(), objDto.getCep(), cli, cid);
+
+		cli.getEnderecos().add(end);					// Add addresses to client
+
+		cli.getTelefones().add(objDto.getTelefone1());	// Add telephones to client
+		
+		//Add multiple phones to the client
+		if(objDto.getTelefone2() != null) {
+			cli.getTelefones().add(objDto.getTelefone2());
+		}
+		if(objDto.getTelefone3() != null) {
+			cli.getTelefones().add(objDto.getTelefone3());
+		}
+		
+		return cli;
+	}
+	
 	
 }
 
