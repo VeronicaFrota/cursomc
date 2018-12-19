@@ -46,7 +46,7 @@ public class ClienteService {
 
 
 
-	// Update the Category
+	// Update the Client
 	// When null ID, inserts, When ID is not null it updates
 	public Cliente update(Cliente obj) {
 		Cliente newObj = find(obj.getId());			// Instance the client from the database, checks if ID exists

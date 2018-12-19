@@ -34,18 +34,31 @@ public class CategoriaService {
 		return obj;
 	}
 
+
+	
 	// Insert new category
 	public Categoria insert(Categoria obj) {
 		obj.setId(null);		// To confirm that it is a new object and is not an existing one
 		return repo.save(obj);
 	}
-	
+
+
+
 	// Update the Category
 	// When null ID, inserts, When ID is not null it updates
 	public Categoria update(Categoria obj) {
-		find(obj.getId());			// Checks if ID exists
-		return repo.save(obj);
+		Categoria newObj = find(obj.getId());			// Instance the client from the database, checks if ID exists
+		updateData(newObj, obj);					// Updates the data based on what comes from the arguments
+		return repo.save(newObj);					// Saves the new data
 	}
+
+
+
+	// Refresh newObj data with data that came from obj
+	private void updateData(Categoria newObj, Categoria obj) {
+		newObj.setNome(obj.getNome());
+	}
+
 
 	// Delete the Category
 	public void delete(Integer id) {
@@ -57,11 +70,15 @@ public class CategoriaService {
 		}
 	}
 
+
+
 	// Find all category
 	public List<Categoria> findAll() {
 		return repo.findAll();		// Return all category
 	}
-	
+
+
+
 	// To return a category page
 	// Integer page: Page number
 	// Integer linesPerPage: lines per page
@@ -71,7 +88,9 @@ public class CategoriaService {
 		PageRequest pageRequest = new PageRequest(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		return repo.findAll(pageRequest);
 	}
-	
+
+
+
 	// Convert objDto to an object
 	public Categoria fromDTO(CategoriaDTO objDto) {
 		return new Categoria(objDto.getId(), objDto.getNome());
