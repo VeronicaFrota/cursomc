@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.veronicafrota.cursomc.domain.Cidade;
 import com.veronicafrota.cursomc.domain.Cliente;
@@ -52,6 +53,7 @@ public class ClienteService {
 
 
 	// Insert new client
+	@Transactional			// To ensure it will save both client and address in the same transaction
 	public Cliente insert(Cliente obj) {
 		obj.setId(null);		// To confirm that it is a new object and is not an existing one
 		obj = repo.save(obj);
@@ -85,7 +87,7 @@ public class ClienteService {
 		try{
 			repo.delete(id);		// Deletes by ID
 		} catch (DataIntegrityViolationException e) {	// Post custom exception
-			throw new DataIntegrityException("Não é possivel excluir por que há entidades relacionadas.");
+			throw new DataIntegrityException("Não é possivel excluir por que há pedidos relacionados.");
 		}
 	}
 
@@ -119,7 +121,7 @@ public class ClienteService {
 	// Convert objDto to an object to DTO
 	public Cliente fromDTO(ClienteNewDTO objDto) {
 		Cliente cli = new Cliente(null, objDto.getNome(), objDto.getEmail(), objDto.getCpfOuCnpj(), TipoCliente.toEnum(objDto.getTipo()));
-		Cidade cid = cidadeRepository.findOne(objDto.getCidadeId());
+		Cidade cid = new Cidade(objDto.getCidadeId(), null, null);
 		Endereco end = new Endereco(null, objDto.getLogradouro(), objDto.getNumero(), objDto.getComplemento(), objDto.getBairro(), objDto.getCep(), cli, cid);
 
 		cli.getEnderecos().add(end);					// Add addresses to client

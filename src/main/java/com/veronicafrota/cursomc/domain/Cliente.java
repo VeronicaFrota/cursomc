@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -35,8 +36,8 @@ public class Cliente implements Serializable{
 	@OneToMany(mappedBy = "cliente")				// To refer to who was mapped, in this case, pedido
 	private List<Pedido> pedidos = new ArrayList<>();
 
-	@OneToMany(mappedBy = "cliente")				// The client has an address list
-	private List<Endereco> enderecos = new ArrayList<>();
+	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)	// Cascade all deletes all client addresses that exclude and do not access requests
+	private List<Endereco> enderecos = new ArrayList<>();		// The client has an address list
 	
 	// Collection of strings associated with the client, phone being represented by a set of strings
 	// Set is a set that does not accept repetition
