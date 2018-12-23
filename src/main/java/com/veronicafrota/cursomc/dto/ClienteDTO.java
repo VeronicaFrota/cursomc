@@ -7,7 +7,10 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.veronicafrota.cursomc.domain.Cliente;
+import com.veronicafrota.cursomc.services.validation.ClienteUpdate;
 
+//Custom annotation created in validation, in service
+@ClienteUpdate
 // Serializable -> To facilitate file saving and network traffic
 public class ClienteDTO implements Serializable {
 
