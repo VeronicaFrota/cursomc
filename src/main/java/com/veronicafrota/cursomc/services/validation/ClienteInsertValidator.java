@@ -6,14 +6,21 @@ import java.util.List;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.veronicafrota.cursomc.domain.Cliente;
 import com.veronicafrota.cursomc.domain.enums.TipoCliente;
 import com.veronicafrota.cursomc.dto.ClienteNewDTO;
+import com.veronicafrota.cursomc.repositories.ClienteRepository;
 import com.veronicafrota.cursomc.resource.exceptions.FieldMessage;
 import com.veronicafrota.cursomc.services.validation.util.BR;
 
 // Creates the validation that will be used in the validation of CPF or CNPJ
 public class ClienteInsertValidator implements ConstraintValidator<ClienteInsert, ClienteNewDTO> {
 
+	@Autowired
+	private ClienteRepository repo;
+	
 	@Override
 	public void initialize(ClienteInsert ann) {
 	}
@@ -36,6 +43,12 @@ public class ClienteInsertValidator implements ConstraintValidator<ClienteInsert
 		}
 
 
+		// Check if email is unique
+		Cliente aux = repo.findByEmail(objDto.getEmail());
+		if(aux != null) {			// If aux is different from null, it means that the email already exists
+			list.add(new FieldMessage("email", "E-mail já existente"));
+		}
+		
 
 		// Go through the list that I created (Field Message) and for each object that is in the list, adds a corresponding error in the list of errors of frameWork
 		for (FieldMessage e : list) {
