@@ -89,6 +89,16 @@ public class Pedido implements Serializable {
 		return true;
 	}
 
+	// Method to return the order total (Get used to the Json could see)
+	public double getValorTotal() {
+		double soma = 0.0;
+		//  For each ItemPedido (ip) in Item list (itens)
+		for(ItemPedido ip : itens) {
+			soma = soma + ip.getSubTotal();
+		}
+		return soma;
+	}
+	
 	// Getters and Setters
 	public Integer getId() {
 		return id;

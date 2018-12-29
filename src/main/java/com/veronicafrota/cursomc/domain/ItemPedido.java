@@ -65,6 +65,11 @@ public class ItemPedido implements Serializable {
 		return true;
 	}
 
+	// To calculate the total value of the items in the request (Get used to the Json could see)
+	public double getSubTotal() {
+		return (preco - desconto) * quantidade;
+	}
+	
 	// Getters and setters
 	@JsonIgnore						// Not to be serialized, not serializing Pedido and Produto
 	public Pedido getPedido() {
