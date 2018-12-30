@@ -18,10 +18,11 @@ public class ItemPedido implements Serializable {
 	private ItemPedidoPK id = new ItemPedidoPK();	// The ID is of the ItemPedidPK type, since it contains the reference between the two classes, Order and Product
 
 	private Double desconto;
+
 	private Integer quantidade;
+
 	private Double preco;
 
-	
 	// Empty constructor
 	public ItemPedido() {
 
@@ -75,11 +76,19 @@ public class ItemPedido implements Serializable {
 	public Pedido getPedido() {
 		return id.getPedido();
 	}
+	
+	public void setPedido(Pedido pedido) {
+		id.setPedido(pedido);
+	}
 
 	public Produto getProduto() {
 		return id.getProduto();
 	}
-	
+
+	public void setProduto(Produto produto) {
+		id.setProduto(produto);
+	}
+
 	public Double getDesconto() {
 		return desconto;
 	}

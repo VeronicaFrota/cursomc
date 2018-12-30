@@ -11,10 +11,12 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.veronicafrota.cursomc.domain.enums.EstadoPagamento;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)				// Used to map an inheritance(herança)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@type")	//  To get the type of payment (credit card or Check) with the additional field @type 
 public abstract class Pagamento implements Serializable{
 	
 	// Implement the Serializable interface, which says that its objects can be converted to a sequence of bits

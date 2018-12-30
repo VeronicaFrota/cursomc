@@ -5,9 +5,11 @@ import java.util.Date;
 import javax.persistence.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.veronicafrota.cursomc.domain.enums.EstadoPagamento;
 
 @Entity
+@JsonTypeName("pagamentoComBoleto")			// Identifies the class, linked with the @type added in Pagamento 
 public class PagamentoComBoleto extends Pagamento {
 	
 	// Implement the Serializable interface, which says that its objects can be converted to a sequence of bits
