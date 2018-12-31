@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.veronicafrota.cursomc.domain.PagamentoComBoleto;
 import com.veronicafrota.cursomc.domain.PagamentoComCartao;
 
-//  Used to register the sub classes PagamentoComBoleto and PagamentoComCartao 
+// Used to register the sub classes PagamentoComBoleto and PagamentoComCartao, used in conjunction with @type
 @Configuration
 public class JacksonConfig {
 	// https://stackoverflow.com/questions/41452598/overcome-can-not-construct-instance-ofinterfaceclass-without-hinting-the-pare
