@@ -1,6 +1,8 @@
 package com.veronicafrota.cursomc.domain;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -47,6 +49,7 @@ public class ItemPedido implements Serializable {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
+	
 
 	// Equals = method that compares two objects
 	@Override
@@ -66,17 +69,39 @@ public class ItemPedido implements Serializable {
 		return true;
 	}
 
+
 	// To calculate the total value of the items in the request (Get used to the Json could see)
 	public double getSubTotal() {
 		return (preco - desconto) * quantidade;
 	}
-	
+
+
+	// To concatenate the text and display the message that will be sent by email
+	@Override
+	public String toString() {
+
+		NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));		// Formats for real (R$) 
+
+		StringBuilder builder = new StringBuilder();
+ 		builder.append(getProduto().getNome());
+		builder.append(", Qte: ");
+		builder.append(getQuantidade());
+		builder.append(", Preço unitário: ");
+		builder.append(nf.format(getPreco()));
+		builder.append(", Subtotal: ");
+		builder.append(nf.format(getSubTotal()));
+		builder.append("\n");
+
+		return builder.toString();
+	}
+
+
 	// Getters and setters
 	@JsonIgnore						// Not to be serialized, not serializing Pedido and Produto
 	public Pedido getPedido() {
 		return id.getPedido();
 	}
-	
+
 	public void setPedido(Pedido pedido) {
 		id.setPedido(pedido);
 	}
