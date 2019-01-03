@@ -39,6 +39,9 @@ public class PedidoService {
 	
 	@Autowired
 	private ClienteRepository clienteRepository;
+
+	@Autowired
+	private EmailService emailService;
 	
 	
 	// Operation able to search category by code.
@@ -85,7 +88,7 @@ public class PedidoService {
 		
 		itemPedidoRepository.save(obj.getItens()); 									// Saves the ItemPedido in the Banck
 
-		System.out.println(obj);													// Prints the request 
+		emailService.sendOrderConfirmationEmail(obj);								// Calls email sending
 
 		return obj;
 
