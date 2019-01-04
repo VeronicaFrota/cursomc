@@ -142,11 +142,11 @@ public class DBService {
 		// Client Instance.
 		Cliente cli1 = new Cliente(null, "Maria Silva", "maria@gmail.com", "12345678919", TipoCliente.PESSOAFISICA);
 		cli1.getTelefones().addAll(Arrays.asList("32324898", "767556789"));
-		
+
 		// Address Instance.
 		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto 203", "Jardim", "09987800", cli1, c1);
 		Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "Centro", "07865899", cli1, c2);
-		
+
 		// Association between the client and the address, informing which client belongs to which address.
 		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
 		

@@ -30,6 +30,7 @@ public class TestConfig {
 
 
 	// Search for the @Bean component
+	// To send email with mock
 	@Bean
 	public EmailService emailService() {
 		return new MockEmailService();
