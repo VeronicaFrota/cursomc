@@ -88,7 +88,7 @@ public class PedidoService {
 		
 		itemPedidoRepository.save(obj.getItens()); 									// Saves the ItemPedido in the Banck
 
-		emailService.sendOrderConfirmationEmail(obj);								// Calls email sending
+		emailService.sendOrderConfirmationHtmlEmail(obj);							// Calls email sending
 
 		return obj;
 
