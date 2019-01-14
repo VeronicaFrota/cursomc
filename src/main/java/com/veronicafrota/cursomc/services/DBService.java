@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.veronicafrota.cursomc.domain.Categoria;
@@ -34,6 +35,9 @@ import com.veronicafrota.cursomc.repositories.ProdutoRepository;
 
 @ Service
 public class DBService {
+
+	@Autowired
+	private BCryptPasswordEncoder pe;						// Inject bean (added in the SecurityConfig class) to encrypt the user's password
 
 	@Autowired
 	private CategoriaRepository categoriaRepository;		// To access the repository, by entering the data
@@ -140,7 +144,7 @@ public class DBService {
 
 
 		// Client Instance.
-		Cliente cli1 = new Cliente(null, "Maria Silva", "maria@gmail.com", "12345678919", TipoCliente.PESSOAFISICA);
+		Cliente cli1 = new Cliente(null, "Maria Silva", "veronica.s.frota@gmail.com", "12345678919", TipoCliente.PESSOAFISICA, pe.encode("123"));
 		cli1.getTelefones().addAll(Arrays.asList("32324898", "767556789"));
 
 		// Address Instance.

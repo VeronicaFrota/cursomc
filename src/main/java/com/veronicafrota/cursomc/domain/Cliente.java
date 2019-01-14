@@ -36,6 +36,9 @@ public class Cliente implements Serializable{
 	private String cpfOuCnpj;
 	private Integer tipo;
 
+	@JsonIgnore										// To not show the password in Json
+	private String senha;
+
 	@JsonIgnore										// For cyclic Json serialization, to use @JsonBackReference in the address class so that it can not serialize the client class
 	@OneToMany(mappedBy = "cliente")				// To refer to who was mapped, in this case, pedido
 	private List<Pedido> pedidos = new ArrayList<>();
@@ -55,13 +58,14 @@ public class Cliente implements Serializable{
 	}
 	
 	// Constructor with data
-	public Cliente(Integer id, String nome, String email, String cpfOuCnpj, TipoCliente tipo) {
+	public Cliente(Integer id, String nome, String email, String cpfOuCnpj, TipoCliente tipo, String senha) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
 		this.cpfOuCnpj = cpfOuCnpj;
 		this.tipo = (tipo == null) ? null: tipo.getCod();		// To get the client-type cod
+		this.senha = senha;
 	}
 	
 	// HashCode Equals = To compare objects by value
@@ -155,6 +159,14 @@ public class Cliente implements Serializable{
 
 	public void setPedidos(List<Pedido> pedidos) {
 		this.pedidos = pedidos;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
 	}
 
 	
