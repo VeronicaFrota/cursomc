@@ -33,7 +33,8 @@ public class SecurityConfig extends  WebSecurityConfigurerAdapter {
 	// Vector with the read-only paths, so that anyone who isn't logged in can view catalogs of categories
 	private static final String[] PUBLIC_MATCHERS_GET = {
 			"/produtos/**",
-			"/categorias/**" 
+			"/categorias/**",
+			"/clientes/**"
 	};
 
 

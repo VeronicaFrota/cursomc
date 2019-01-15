@@ -5,18 +5,21 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.veronicafrota.cursomc.domain.enums.Perfil;
 import com.veronicafrota.cursomc.domain.enums.TipoCliente;
 
 @Entity
@@ -30,31 +33,38 @@ public class Cliente implements Serializable{
 	private Integer id;
 	private String nome;
 
-	@Column(unique=true)							// To ensure email is unique
+	@Column(unique=true)										// To ensure email is unique
 	private String email;
 
 	private String cpfOuCnpj;
 	private Integer tipo;
 
-	@JsonIgnore										// To not show the password in Json
+	@JsonIgnore													// To not show the password in Json
 	private String senha;
 
-	@JsonIgnore										// For cyclic Json serialization, to use @JsonBackReference in the address class so that it can not serialize the client class
-	@OneToMany(mappedBy = "cliente")				// To refer to who was mapped, in this case, pedido
+	@JsonIgnore													// For cyclic Json serialization, to use @JsonBackReference in the address class so that it can not serialize the client class
+	@OneToMany(mappedBy = "cliente")							// To refer to who was mapped, in this case, pedido
 	private List<Pedido> pedidos = new ArrayList<>();
 
 	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)	// Cascade all deletes all client addresses that exclude and do not access requests
 	private List<Endereco> enderecos = new ArrayList<>();		// The client has an address list
 	
+	// Collection of strings associated with the client, phone being represented by a set of strings,
+	// Set is a set that does not accept repetition
+	@ElementCollection											// maps as weak entity
+	@CollectionTable(name = "telefone")							// Auxiliary table that stores your phone data
+	private Set<String> telefones = new HashSet<>();
+
+	// For customer profiles
 	// Collection of strings associated with the client, phone being represented by a set of strings
 	// Set is a set that does not accept repetition
-	@ElementCollection						// maps as weak entity
-	@CollectionTable(name = "telefone")		// Auxiliary table that stores your phone data
-	private Set<String> telefones = new HashSet<>();
+	@ElementCollection(fetch = FetchType.EAGER)					// EAGER: ensures that whenever a customer search is carried out, also bring your profiles
+	@CollectionTable(name = "PERFIS")
+	private Set<Integer> perfis = new HashSet<>();
 	
 	// Empty constructor
 	public Cliente() {
-
+		addPerfil(Perfil.CLIENTE);								// For default always add the customer profile to customer
 	}
 	
 	// Constructor with data
@@ -66,6 +76,7 @@ public class Cliente implements Serializable{
 		this.cpfOuCnpj = cpfOuCnpj;
 		this.tipo = (tipo == null) ? null: tipo.getCod();		// To get the client-type cod
 		this.senha = senha;
+		addPerfil(Perfil.CLIENTE);								// For default always add the customer profile to customer
 	}
 	
 	// HashCode Equals = To compare objects by value
@@ -153,6 +164,16 @@ public class Cliente implements Serializable{
 		this.telefones = telefones;
 	}
 
+	// Scrolls the collection by converting all to the enumerated type profile
+	public Set<Perfil> getPerfis() {
+		return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
+	}
+
+	// Add profile
+	public void addPerfil(Perfil perfil) {
+		perfis.add(perfil.getCod());
+	}
+	
 	public List<Pedido> getPedidos() {
 		return pedidos;
 	}

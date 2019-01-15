@@ -20,6 +20,7 @@ import com.veronicafrota.cursomc.domain.PagamentoComCartao;
 import com.veronicafrota.cursomc.domain.Pedido;
 import com.veronicafrota.cursomc.domain.Produto;
 import com.veronicafrota.cursomc.domain.enums.EstadoPagamento;
+import com.veronicafrota.cursomc.domain.enums.Perfil;
 import com.veronicafrota.cursomc.domain.enums.TipoCliente;
 import com.veronicafrota.cursomc.repositories.CategoriaRepository;
 import com.veronicafrota.cursomc.repositories.CidadeRepository;
@@ -147,15 +148,21 @@ public class DBService {
 		Cliente cli1 = new Cliente(null, "Maria Silva", "veronica.s.frota@gmail.com", "12345678919", TipoCliente.PESSOAFISICA, pe.encode("123"));
 		cli1.getTelefones().addAll(Arrays.asList("32324898", "767556789"));
 
+		Cliente cli2 = new Cliente(null, "Ana Martinsn", "veronicafrota2011@gmail.com", "55456868008", TipoCliente.PESSOAFISICA, pe.encode("123"));
+		cli2.getTelefones().addAll(Arrays.asList("67564898", "768888789"));
+		cli2.addPerfil(Perfil.ADMIN);
+
 		// Address Instance.
 		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto 203", "Jardim", "09987800", cli1, c1);
 		Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "Centro", "07865899", cli1, c2);
+		Endereco e3 = new Endereco(null, "Avenida Floreano", "2106", null, "Centro", "07898769", cli2, c2);
 
 		// Association between the client and the address, informing which client belongs to which address.
 		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+		cli2.getEnderecos().addAll(Arrays.asList(e3));
 		
-		clienteRepository.save(Arrays.asList(cli1));		// Saves the object in the database with repository.
-		enderecoRepository.save(Arrays.asList(e1, e2));		// Saves the object in the database with repository.
+		clienteRepository.save(Arrays.asList(cli1, cli2));		// Saves the object in the database with repository.
+		enderecoRepository.save(Arrays.asList(e1, e2, e3));		// Saves the object in the database with repository.
 
 
 		// ------------------------------------------------------------------------------------------------------------------------- //
