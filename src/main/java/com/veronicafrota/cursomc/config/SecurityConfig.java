@@ -19,6 +19,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.veronicafrota.cursomc.security.JWTAuthenticationFilter;
+import com.veronicafrota.cursomc.security.JWTAuthorizationFilter;
 import com.veronicafrota.cursomc.security.JWTUtil;
 
 // To speak what will be released, or not, by default
@@ -67,6 +68,7 @@ public class SecurityConfig extends  WebSecurityConfigurerAdapter {
 			.anyRequest().authenticated();													// For everything, requires authentication
 
 		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));		// Filter to verify user authentication (generate token)
+		http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));		// Filter to verify user authorization (generate token)
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); 	// Ensures that the banckend does not create user session 
 	}
 
