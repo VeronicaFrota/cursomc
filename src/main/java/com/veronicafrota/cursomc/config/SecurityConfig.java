@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -25,6 +26,7 @@ import com.veronicafrota.cursomc.security.JWTUtil;
 // To speak what will be released, or not, by default
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)				// To authorize only certain specific profiles
 public class SecurityConfig extends  WebSecurityConfigurerAdapter {
 
 	@Autowired
@@ -42,11 +44,17 @@ public class SecurityConfig extends  WebSecurityConfigurerAdapter {
 	};
 
 
-
+	// Permissions that will allow only GET
 	// Vector with the read-only paths, so that anyone who isn't logged in can view catalogs of categories
 	private static final String[] PUBLIC_MATCHERS_GET = {
 			"/produtos/**",
-			"/categorias/**",
+			"/categorias/**"
+	};
+
+
+	// Permissions that will allow only POST
+	// Vector with the read-only paths, so that anyone who isn't logged in can view catalogs of categories
+	private static final String[] PUBLIC_MATCHERS_POST = {
 			"/clientes/**"
 	};
 
@@ -64,7 +72,8 @@ public class SecurityConfig extends  WebSecurityConfigurerAdapter {
 		http.cors().and().csrf().disable();													// Call method cors And it disables the attack of csrf (caching-related attack)
 		http.authorizeRequests()
 		 	.antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()					// Only allows the method to get access to this way
-			.antMatchers(PUBLIC_MATCHERS).permitAll()										// All inside the vector are ok
+		 	.antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()					// Only allows the method to get access to this way
+		 	.antMatchers(PUBLIC_MATCHERS).permitAll()										// All inside the vector are ok
 			.anyRequest().authenticated();													// For everything, requires authentication
 
 		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));		// Filter to verify user authentication (generate token)
