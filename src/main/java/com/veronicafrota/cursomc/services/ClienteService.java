@@ -14,12 +14,15 @@ import org.springframework.transaction.annotation.Transactional;
 import com.veronicafrota.cursomc.domain.Cidade;
 import com.veronicafrota.cursomc.domain.Cliente;
 import com.veronicafrota.cursomc.domain.Endereco;
+import com.veronicafrota.cursomc.domain.enums.Perfil;
 import com.veronicafrota.cursomc.domain.enums.TipoCliente;
 import com.veronicafrota.cursomc.dto.ClienteDTO;
 import com.veronicafrota.cursomc.dto.ClienteNewDTO;
 import com.veronicafrota.cursomc.repositories.CidadeRepository;
 import com.veronicafrota.cursomc.repositories.ClienteRepository;
 import com.veronicafrota.cursomc.repositories.EnderecoRepository;
+import com.veronicafrota.cursomc.security.UserSS;
+import com.veronicafrota.cursomc.services.exceptions.AuthorizationException;
 import com.veronicafrota.cursomc.services.exceptions.DataIntegrityException;
 import com.veronicafrota.cursomc.services.exceptions.ObjectNotFoundException;
 
@@ -29,10 +32,10 @@ import com.veronicafrota.cursomc.services.exceptions.ObjectNotFoundException;
 public class ClienteService {
 
 	@Autowired
-	private BCryptPasswordEncoder pe;		// Inject bean (added in the SecurityConfig class) to encrypt the user's password
+	private BCryptPasswordEncoder pe;				// Inject bean (added in the SecurityConfig class) to encrypt the user's password
 
 	@Autowired
-	private ClienteRepository repo;			// Declares dependency on an object of type CategoryRepository
+	private ClienteRepository repo;					// Declares dependency on an object of type CategoryRepository
 
 	@Autowired
 	private CidadeRepository cidadeRepository;
@@ -40,9 +43,17 @@ public class ClienteService {
 	@Autowired
 	private EnderecoRepository enderecoRepository;
 
-	// Operation able to search client by code.
-	// To perform client search using id.
+
+	// Operation able to search client by code (To perform client search using id.)
 	public Cliente find(Integer id) {
+		
+		// Get the user logged in
+		UserSS user = UserService.authenticated();
+		if(user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationException("Acesso negado");
+		}
+
+		
 		Cliente obj = repo.findOne(id);
 
 		// Message to handle error of objects not found.
@@ -56,11 +67,11 @@ public class ClienteService {
 
 
 	// Insert new client
-	@Transactional			// To ensure it will save both client and address in the same transaction
+	@Transactional										// To ensure it will save both client and address in the same transaction
 	public Cliente insert(Cliente obj) {
-		obj.setId(null);		// To confirm that it is a new object and is not an existing one
+		obj.setId(null);								// To confirm that it is a new object and is not an existing one
 		obj = repo.save(obj);
-		enderecoRepository.save(obj.getEnderecos());		// To save the address
+		enderecoRepository.save(obj.getEnderecos());	// To save the address
 		return obj;
 	}
 
@@ -86,9 +97,9 @@ public class ClienteService {
 
 	// Delete the Category
 	public void delete(Integer id) {
-		find(id);					// Checks if ID exists
+		find(id);										// Checks if ID exists
 		try{
-			repo.delete(id);		// Deletes by ID
+			repo.delete(id);							// Deletes by ID
 		} catch (DataIntegrityViolationException e) {	// Post custom exception
 			throw new DataIntegrityException("Não é possivel excluir por que há pedidos relacionados.");
 		}
@@ -97,7 +108,7 @@ public class ClienteService {
 
 	// Find all client
 	public List<Cliente> findAll() {
-		return repo.findAll();		// Return all client
+		return repo.findAll();							// Return all client
 	}
 	
 
