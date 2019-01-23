@@ -5,17 +5,17 @@ import java.net.URI;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.veronicafrota.cursomc.domain.Categoria;
 import com.veronicafrota.cursomc.domain.Pedido;
-import com.veronicafrota.cursomc.dto.CategoriaDTO;
 import com.veronicafrota.cursomc.services.PedidoService;
 
 // REST controller accesses the Service layer (Ex: private PedidoService service;)
@@ -39,7 +39,6 @@ public class PedidoResource {
 	}
 
 
-
 	// Method that receives a category in Json format and inserts into the database
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> insert(@Valid @RequestBody Pedido obj){	//@RequestBody = Converts Json to java object automatically, Answer Http that has no body
@@ -51,6 +50,21 @@ public class PedidoResource {
 		
 		return ResponseEntity.created(uri).build();		// Creates the URI
 	}
+
+
+	// Listing method per page
+	@RequestMapping(method=RequestMethod.GET)												// To list per page
+	public ResponseEntity<Page<Pedido>> findPage(											// Setting To list per page with the optional parameter (@RequestParam )
+			@RequestParam(value="page", defaultValue="0") Integer page, 
+			@RequestParam(value="linesPerPage", defaultValue="24") Integer linesPerPage, 
+			@RequestParam(value="orderBy", defaultValue="instante") String orderBy,
+			@RequestParam(value="direction", defaultValue="DESC") String direction) {				
+		
+		Page<Pedido> list = service.findPage(page, linesPerPage, orderBy, direction);	// Return the categories
+
+		return ResponseEntity.ok().body(list);											// Informs if the answer is ok
+	}	
+
 	
 	
 }

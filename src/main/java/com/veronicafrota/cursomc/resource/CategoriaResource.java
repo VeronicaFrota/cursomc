@@ -43,7 +43,6 @@ public class CategoriaResource {
 	}
 
 
-
 	// Method that receives a category in Json format and inserts into the database
  	@PreAuthorize("hasAnyRole('ADMIN')") 											// To indicate that, in this case, only ADMIN can do this action
 	@RequestMapping(method = RequestMethod.POST)
@@ -59,7 +58,6 @@ public class CategoriaResource {
 	}
 
 
-
 	// Method responsible for changing the data from the url
 	@RequestMapping(value="/{id}", method=RequestMethod.PUT)						// To get the URL ID and update with PUT
 	@PreAuthorize("hasAnyRole('ADMIN')") 											// To indicate that, in this case, only ADMIN can do this action
@@ -72,7 +70,6 @@ public class CategoriaResource {
 	}
 
 
-
 	// Method responsible for deleting the data.
 	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)						// To get the URL ID and update with PUT
 	@PreAuthorize("hasAnyRole('ADMIN')") 											// To indicate that, in this case, only ADMIN can do this action
@@ -80,7 +77,6 @@ public class CategoriaResource {
 		service.delete(id);
 		return ResponseEntity.noContent().build();  
 	}
-
 
 
 	// Method responsible to list of category
@@ -91,7 +87,6 @@ public class CategoriaResource {
 		List<CategoriaDTO> listDto = list.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList()); // Converts the list to a DTO list;
 		return ResponseEntity.ok().body(listDto);									// Informs if the answer is ok
 	}
-
 
 
 	// Listing method per page

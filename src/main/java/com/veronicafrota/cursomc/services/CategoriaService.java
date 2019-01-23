@@ -34,14 +34,12 @@ public class CategoriaService {
 		return obj;
 	}
 
-
 	
 	// Insert new category
 	public Categoria insert(Categoria obj) {
 		obj.setId(null);		// To confirm that it is a new object and is not an existing one
 		return repo.save(obj);
 	}
-
 
 
 	// Update the Category
@@ -51,7 +49,6 @@ public class CategoriaService {
 		updateData(newObj, obj);					// Updates the data based on what comes from the arguments
 		return repo.save(newObj);					// Saves the new data
 	}
-
 
 
 	// Refresh newObj data with data that came from obj
@@ -71,12 +68,10 @@ public class CategoriaService {
 	}
 
 
-
 	// Find all category
 	public List<Categoria> findAll() {
 		return repo.findAll();		// Return all category
 	}
-
 
 
 	// To return a category page
@@ -88,7 +83,6 @@ public class CategoriaService {
 		PageRequest pageRequest = new PageRequest(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		return repo.findAll(pageRequest);
 	}
-
 
 
 	// Convert objDto to an object

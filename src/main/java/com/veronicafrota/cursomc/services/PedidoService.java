@@ -3,9 +3,13 @@ package com.veronicafrota.cursomc.services;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.veronicafrota.cursomc.domain.Cliente;
 import com.veronicafrota.cursomc.domain.ItemPedido;
 import com.veronicafrota.cursomc.domain.PagamentoComBoleto;
 import com.veronicafrota.cursomc.domain.Pedido;
@@ -15,6 +19,8 @@ import com.veronicafrota.cursomc.repositories.ItemPedidoRepository;
 import com.veronicafrota.cursomc.repositories.PagamentoRepository;
 import com.veronicafrota.cursomc.repositories.PedidoRepository;
 import com.veronicafrota.cursomc.repositories.ProdutoRepository;
+import com.veronicafrota.cursomc.security.UserSS;
+import com.veronicafrota.cursomc.services.exceptions.AuthorizationException;
 import com.veronicafrota.cursomc.services.exceptions.ObjectNotFoundException;
 
 // For service access and get the information from the repository
@@ -59,7 +65,6 @@ public class PedidoService {
 	}
 
 
-
 	// Insert new Pedido
 	@Transactional
 	public Pedido insert(Pedido obj) {
@@ -94,4 +99,25 @@ public class PedidoService {
 
 	}
 
+
+	// To return a Pedido page (Pedido per Cliente)
+	// Integer page: Page number
+	// Integer linesPerPage: lines per page
+	// String orderBy: Sort Attribute
+	// String direction: Direction for sorting
+	public Page<Pedido> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+		
+		UserSS user = UserService.authenticated();									// Get the user logged in
+
+		if(user == null) {															// Verify the authentication, if the user logged
+			throw new AuthorizationException("Acesso negado");
+		}
+		
+		PageRequest pageRequest = new PageRequest(page, linesPerPage, Direction.valueOf(direction), orderBy);
+
+		Cliente cliente = clienteRepository.findOne(user.getId());					// Get the ID from the client that is logged in
+
+		return repo.findByCliente(cliente, pageRequest);							// Returns only requests from the client that is logged in
+	}
+	
 }
