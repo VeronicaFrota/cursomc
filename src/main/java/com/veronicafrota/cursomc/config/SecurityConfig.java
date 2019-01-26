@@ -52,10 +52,11 @@ public class SecurityConfig extends  WebSecurityConfigurerAdapter {
 	};
 
 
-	// Permissions that will allow only POST
+	// Permissions that will allow only POST (Accesses without being logged in)
 	// Vector with the read-only paths, so that anyone who isn't logged in can view catalogs of categories
 	private static final String[] PUBLIC_MATCHERS_POST = {
-			"/clientes/**"
+			"/clientes/**",
+			"/auth/forgot/**"
 	};
 
 

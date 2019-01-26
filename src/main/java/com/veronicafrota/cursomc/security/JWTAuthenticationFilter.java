@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.veronicafrota.cursomc.dto.CredenciaisDTO;
 
-//  Intercepta a requisição (Ver se o usuario e senha estão corretos), executa alguma coisa antes e se der certoele devolve a execução
+//  Intercepta a requisição (Ver se o usuario e senha estão corretos), executa alguma coisa antes e se der certo, ele devolve a execução
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter{
 
 	private AuthenticationManager authenticationManager;
