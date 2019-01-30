@@ -44,6 +44,17 @@ public class ClienteResource {
 	}
 
 
+	// Get the Cliente by email
+	// * ResponseEntity<?>: special type of spring that already stores (encapsulation) various information from an HTTP response to a REST service, <?> is equivalent to any type
+	// * @@RequestParam: Receber e-mail como um parâmetro
+	@RequestMapping(value="/email", method=RequestMethod.GET)
+	public ResponseEntity<Cliente>find(@RequestParam(value="value") String email) {
+		
+		Cliente obj = service.findByEmail(email);
+		return ResponseEntity.ok().body(obj);										// Informs if the answer is ok
+	}
+
+
 	// Method that receives a client in Json format and inserts into the database
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO objDto){	//@RequestBody = Converts Json to java object automatically, Answer Http that has no body

@@ -31,7 +31,7 @@ public class AuthResource {
 		UserSS user = UserService.authenticated();						// Get user logged
 		String token = jwtUtil.generateToken(user.getUsername());		// Create new token with the user (with the new date)
 		response.addHeader("Authorization", "Bearer " + token);			// Add the token to the request response 
-		res.addHeader("access-control-expose-headers", "Authorization");// To solver the problem with CORS
+		response.addHeader("access-control-expose-headers", "Authorization");// To solver the problem with CORS
 		return ResponseEntity.noContent().build();
 	}
 

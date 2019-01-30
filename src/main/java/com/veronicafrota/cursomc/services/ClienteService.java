@@ -44,15 +44,12 @@ public class ClienteService {
 	private EnderecoRepository enderecoRepository;
 
 
-	// Operation able to search client by code (To perform client search using id.)
+	// Operation able to search Cliente by code (To perform Cliente search using id.)
 	public Cliente find(Integer id) {
-		
-		// Get the user logged in
-		UserSS user = UserService.authenticated();
+		UserSS user = UserService.authenticated();			// Get the user logged in
 		if(user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
 			throw new AuthorizationException("Acesso negado");
 		}
-
 		
 		Cliente obj = repo.findOne(id);
 
@@ -61,9 +58,9 @@ public class ClienteService {
 			throw new ObjectNotFoundException(
 					"Objeto não encontrado! Id: " + id + ", tipo: " + Cliente.class.getName());
 		}
+
 		return obj;
 	}
-
 
 
 	// Insert new client
@@ -76,7 +73,6 @@ public class ClienteService {
 	}
 
 
-
 	// Update the Client
 	// When null ID, inserts, When ID is not null it updates
 	public Cliente update(Cliente obj) {
@@ -86,13 +82,11 @@ public class ClienteService {
 	}
 
 
-
 	// Refresh newObj data with data that came from obj
 	private void updateData(Cliente newObj, Cliente obj) {
 		newObj.setNome(obj.getNome());
 		newObj.setEmail(obj.getEmail());
 	}
-
 
 
 	// Delete the Category
@@ -112,6 +106,26 @@ public class ClienteService {
 	}
 	
 
+	// Operation able to search Cliente by email
+	public Cliente findByEmail(String email) {
+		UserSS user = UserService.authenticated();			// Get the user logged in (Verify if is logged)
+
+		// Checks if the user doesn't have the ADMIN permission and the email, if it doesn't, then the access is deprecated
+		if(user == null || !user.hasRole(Perfil.ADMIN) && !email.equals(user.getUsername())) {
+			throw new AuthorizationException("Acesso negado");
+		}
+
+		Cliente obj = repo.findByEmail(email);				// Get the user email
+
+		// Checks if the Client object is not null, that is, if it exists
+		if(obj == null) {
+			throw new ObjectNotFoundException("Objeto não encontrado! Id: " + user.getId() 
+				+ " , Tipo: " + Cliente.class.getTypeName());
+		}
+		
+		return obj;
+	}
+
 
 	// To return a client page
 	// Integer page: Page number
@@ -124,12 +138,10 @@ public class ClienteService {
 	}
 
 
-
 	// Convert objDto to an object
 	public Cliente fromDTO(ClienteDTO objDto) {
 		return new Cliente(objDto.getId(), objDto.getNome(), objDto.getEmail(), null, null, null);
 	}
-
 
 
 	// Convert objDto to an object to DTO
