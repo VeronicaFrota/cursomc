@@ -2,28 +2,27 @@ package com.veronicafrota.cursomc.dto;
 
 import java.io.Serializable;
 
-import com.veronicafrota.cursomc.domain.Produto;
+import com.veronicafrota.cursomc.domain.Cidade;
 
-//Serializable -> To facilitate file saving and network traffic
-public class ProdutoDTO implements Serializable {
+// Serializable -> To facilitate file saving and network traffic
+public class CidadeDTO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
 	private String nome;
-	private Double preco;
 
-	// Empty Constructor
-	public ProdutoDTO() {
+	// Empty constructor
+	public CidadeDTO() {
 
 	}
 
 	// Constructor with data
-	public ProdutoDTO(Produto obj) {
+	public CidadeDTO(Cidade obj) {
 		id = obj.getId();
 		nome = obj.getNome();
-		preco = obj.getPreco();
 	}
+
 
 	// Getters and Setters
 	public Integer getId() {
@@ -33,20 +32,13 @@ public class ProdutoDTO implements Serializable {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
+	
 	public String getNome() {
 		return nome;
 	}
-
+	
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
-	public Double getPreco() {
-		return preco;
-	}
-
-	public void setPreco(Double preco) {
-		this.preco = preco;
-	}
+	
 }

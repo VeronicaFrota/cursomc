@@ -45,7 +45,7 @@ public class CategoriaService {
 	// Update the Category
 	// When null ID, inserts, When ID is not null it updates
 	public Categoria update(Categoria obj) {
-		Categoria newObj = find(obj.getId());			// Instance the client from the database, checks if ID exists
+		Categoria newObj = find(obj.getId());		// Instance the client from the database, checks if ID exists
 		updateData(newObj, obj);					// Updates the data based on what comes from the arguments
 		return repo.save(newObj);					// Saves the new data
 	}
