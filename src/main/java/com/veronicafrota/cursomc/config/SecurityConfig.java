@@ -96,8 +96,10 @@ public class SecurityConfig extends  WebSecurityConfigurerAdapter {
 	// Allow endpoint access of multiple paths with basic configurations
 	@Bean
 	  CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
+		configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "OPTIONS"));
 	    final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-	    source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+	    source.registerCorsConfiguration("/**", configuration);
 	    return source;
 	  }
 
